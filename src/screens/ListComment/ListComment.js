@@ -1,10 +1,25 @@
-import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text, Separator } from 'native-base';
+import React, {Component} from 'react';
+import {Container, Header, Content, Left, Right, Title, ListItem, Text, Separator, Button, Body} from 'native-base';
 export default class ListSeparatorExample extends Component {
     render() {
         return (
             <Container>
-                <Header />
+                <Header>
+                    <Left>
+                        <Button transparent
+                                style={{
+                                    fontSize:50
+                                }}
+                                onPress={
+                                    () => this.props.navigation.goBack()
+                                }>
+                            <Text> go back </Text>
+                        </Button>
+                    </Left>
+                    <Body>
+                    <Title>Header</Title>
+                    </Body>
+                </Header>
                 <Content>
                     <Separator bordered>
                         <Text>FORWARD</Text>

@@ -4,18 +4,33 @@
 
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {Content, Container} from 'native-base';
+import {Content, Container, Root} from 'native-base';
+import {StackNavigator} from 'react-navigation';
 
+import ListComment from './screens/ListComment/ListComment';
 import Hello from './screens/Hello/Hello';
 
 export default class App extends React.Component {
 
     render() {
         return (
-            <Hello/>
+            <Root>
+                <RootNavigator/>
+            </Root>
         );
     }
 }
+
+const RootNavigator = StackNavigator(
+    {
+        Hello: {screen: Hello},
+        List: {screen: ListComment}
+    },
+    {
+        initialRouteName: 'Hello',
+        headerMode: "none",
+    }
+);
 
 const styles = StyleSheet.create({
     container: {
