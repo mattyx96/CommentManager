@@ -1,97 +1,90 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, StatusBar} from 'react-native';
-import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text} from 'native-base';
+import {
+    Container,
+    Header,
+    Title,
+    Icon,
+    Content,
+    Footer,
+    FooterTab,
+    Button,
+    Left,
+    Right,
+    Body,
+    Subtitle,
+    Text
+} from 'native-base';
 
 export default class Hello extends Component {
 
     constructor() {
         super();
-        this.state = {
-            time: "",
-        };
-    }
-
-    componentDidMount() {
-        let date = new Date();
-        var hour = date.getHours();
-        this.setState({
-            time: hour
-        })
+        this.state = {};
     }
 
     render() {
         return (
-            <Container>
-                <StatusBar
-                    backgroundColor="#1abc9c"
-                    barStyle="light-content"
-                />
-                <View style={styles.container}>
-                    <View style={styles.box}>
-                        <Text style={{
-                                alignSelf: 'center',
-                                color: '#ecf0f1',
-                                fontSize:25
-                            }}>{this.getHello()}
-                        </Text>
-                        <Text style={styles.text}>
-                            Sir
-                        </Text>
 
-                        <Button rounded style={styles.button} onPress={
-                            () => this.props.navigation.navigate('List')
-                        }>
-                            <Text>Go</Text>
+            <Container>
+                <Header>
+                    <Left>
+                        <Button transparent onPress={()=>{}}>
+                            <Icon name={"md-home"}/>
                         </Button>
-                    </View>
-                </View>
+                    </Left>
+                    <Body>
+                    <Title>AttivitApp</Title>
+                    <Subtitle> Home </Subtitle>
+                    </Body>
+                    <Right/>
+                </Header>
+
+                <Content>
+                    <Text style={styles.text}>
+                        Benvenuto
+                    </Text>
+
+                    <Button rounded style={styles.button} onPress={
+                            () => this.props.navigation.navigate('Registra')
+                        }>
+                        <Text>Registra la tua Attività</Text>
+                    </Button>
+                    <Button rounded style={styles.button} onPress={
+                            () => this.props.navigation.navigate('Cerca')
+                        }>
+                        <Text>Cerca Attività</Text>
+                    </Button>
+                    <Button rounded style={styles.button} onPress={
+                            () => this.props.navigation.navigate('Contattaci')
+                        }>
+                        <Text>Contattaci</Text>
+                    </Button>
+                </Content>
             </Container>
 
         );
     }
-
-    getHello() {
-        t = this.state.time;
-        if ((t >= "00") && (t < "06")) {
-            return "Good night";
-        }
-        if ((t >= "06") && (t < "13")) {
-            return "Good morning";
-        }
-        if ((t >= "13") && (t < "18")) {
-            return "Good afternoon";
-        }
-        if ((t >= "18") && (t < "24")) {
-            return "Good evening";
-        }
-    }
 }
 
 const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: '#34495e',
-            alignItems: 'center',
-            justifyContent: 'center'
-        },
-        center: {
-            alignSelf: 'center'
-        },
-        text: {
-            color: '#ecf0f1',
-            fontSize: 50,
-            alignSelf: 'center'
-        },
-        button: {
-            margin: 10,
-            alignSelf: 'center',
-            backgroundColor: '#3498db'
-        },
-        box: {
-            padding: 20,
-            backgroundColor: '#1abc9c',
-            margin: 50,
-            borderRadius: 20
-        }
-    })
-    ;
+    container: {
+        flex: 1,
+        backgroundColor: '#34495e',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    center: {
+        alignSelf: 'center'
+    },
+    text: {
+        color: '#000000',
+        fontSize: 50,
+        alignSelf: 'center'
+    },
+    button: {
+        alignSelf: 'center',
+        margin: 50,
+
+    },
+});

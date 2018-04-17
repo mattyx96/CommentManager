@@ -7,8 +7,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Content, Container, Root} from 'native-base';
 import {StackNavigator} from 'react-navigation';
 
-import ListComment from './screens/ListComment/ListComment';
+import Reg from './screens/Registra/Registra';
 import Hello from './screens/Hello/Hello';
+import Contattaci from './screens/Contattaci/Contattaci';
+import Cerca from './screens/CercaAttivita/CercaAttivita';
+import Login from './screens/Login/Login';
+import RegistraAtt from './screens/Registra/RegistraAttivita';
+
 
 export default class App extends React.Component {
 
@@ -24,7 +29,11 @@ export default class App extends React.Component {
 const RootNavigator = StackNavigator(
     {
         Hello: {screen: Hello},
-        List: {screen: ListComment}
+        Registra: {screen: Reg},
+        Contattaci: {screen: Contattaci},
+        Cerca: {screen: Cerca},
+        Login: {screen: Login},
+        RegistraAttivita: {screen: RegistraAtt},
     },
     {
         initialRouteName: 'Hello',
