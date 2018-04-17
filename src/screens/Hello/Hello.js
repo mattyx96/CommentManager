@@ -7,16 +7,8 @@ export default class Hello extends Component {
     constructor() {
         super();
         this.state = {
-            time: "",
+            time: new Date().getHours(),
         };
-    }
-
-    componentDidMount() {
-        let date = new Date();
-        var hour = date.getHours();
-        this.setState({
-            time: hour
-        })
     }
 
     render() {
@@ -51,9 +43,9 @@ export default class Hello extends Component {
     }
 
     getHello() {
-        t = this.state.time;
+        let t = this.state.time;
         if ((t >= "00") && (t < "06")) {
-            return "Good night";
+            return "Vada a dormire";
         }
         if ((t >= "06") && (t < "13")) {
             return "Good morning";
@@ -62,7 +54,7 @@ export default class Hello extends Component {
             return "Good afternoon";
         }
         if ((t >= "18") && (t < "24")) {
-            return "Good evening";
+            return "Buona";
         }
     }
 }
@@ -93,5 +85,4 @@ const styles = StyleSheet.create({
             margin: 50,
             borderRadius: 20
         }
-    })
-    ;
+    });
