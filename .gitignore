@@ -52,5 +52,10 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
-# Bundle artifact
-*.jsbundle
+
+# RNFirebase specific
+#
+.expo/
+/ios/Pods/
+google-services.json
+GoogleService-Info.plist

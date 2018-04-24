@@ -51,6 +51,8 @@ export default class Hello extends Component {
     }
 
     getHello() {
+        console.log("Hello");
+
         t = this.state.time;
         if ((t >= "00") && (t < "06")) {
             return "Vada a dormire";
