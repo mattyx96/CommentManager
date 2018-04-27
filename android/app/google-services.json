@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1046812576437",
+    "firebase_url": "https://commentmanager-1fb66.firebaseio.com",
+    "project_id": "commentmanager-1fb66",
+    "storage_bucket": "commentmanager-1fb66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046812576437:android:0d442e43576e6737",
+        "android_client_info": {
+          "package_name": "com.drinkinc.commentmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1046812576437-rvd62a4d3fcrhde8s81vlkk37k3kdjka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4lisaMN9P_ZD8DIHIwE7EEUFKqJMqoDw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -150,6 +150,7 @@ dependencies {
     implementation(project(':react-native-firebase')) {
         transitive = false
     }
+    compile project(':react-native-vector-icons')
     compile 'com.google.firebase:firebase-core:12.0.1'
 
     // RNFirebase required dependencies

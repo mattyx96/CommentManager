@@ -1,9 +1,8 @@
 import Item from './Item';
 
-
 import React, {Component} from "react";
 import axios from 'axios'
-import {ListView, View, StatusBar, TouchableHighlight} from "react-native";
+import {ListView, View, StatusBar, StyleSheet} from "react-native";
 import {
     Container,
     Header,
@@ -30,7 +29,6 @@ class ListComment extends Component {
             mode: "loading",
             listViewData: {},
             errorMessage: "",
-            selectedId: [],
         };
     }
 
@@ -65,45 +63,6 @@ class ListComment extends Component {
 
     }
 
-    selectItem(id) {
-
-        // if(this.state.mode !== "selection"){
-        //     this.setState({
-        //         mode: "selection"
-        //     });
-        // }
-        if(!this.containsObject(id, this.state.selectedId)) {
-
-            const newSelectedId = this.state.selectedId;
-            newSelectedId.push(id);
-            this.setState({
-                selectedId: newSelectedId
-            });
-            console.log("CASE L ID NON è PRESENTE id:"+id+" state: " + JSON.stringify(this.state));
-        }
-        if(this.containsObject(id, this.state.selectedId)){
-
-            const newSelectedId = this.state.selectedId;
-            newSelectedId.splice(this.state.selectedId.indexOf(id), 1)
-            console.log("newSelectedId" + newSelectedId);
-
-            // this.setState({
-            //     selectedId: newSelectedId
-            // });
-            console.log("CASE L ID è PRESENTE id:"+id+" state: " + JSON.stringify(this.state));
-        }
-    }
-
-    containsObject(obj, list) {
-        let i;
-        for (i = 0; i < list.length; i++) {
-            if (list[i] === obj) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     validateComment(id) {
         this.setState({mode: "loading"});
@@ -126,7 +85,7 @@ class ListComment extends Component {
         this.loadContent();
     }
 
-    getContent() {
+    getContent(){
 
         switch (this.state.mode) {
             case "loading": {
@@ -181,38 +140,13 @@ class ListComment extends Component {
                                         justifyContent: "center"
                                     }}
                                 >
-                            <Text>right</Text>
-                            </Button>
+                                <Icon active name="md-trash" />
+                                </Button>
                             }
                         leftOpenValue={75}
                         rightOpenValue={-75}
+
                     />
-                );
-            }
-
-            case "selection": {
-                console.log("CASE SELECTION state: " + JSON.stringify(this.state));
-
-                return (
-
-                    <List
-                        dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-                        renderRow={
-                                (object) => {
-                                    let selection = false;
-                                    if(this.containsObject(object.id, this.state.selectedId)){
-                                        selection = true;
-                                    }
-                                    console.log("render row selection: " + selection);
-                                    return(
-                                            <Item numLikes={object.num_like} id={object.id} comment={object.comment} date={object.date}
-                                        sender={object.sender} selection={selection} select={()=>{this.selectItem(object.id)}} />
-                                    );
-
-                                }
-                            }
-                    />
-
                 );
             }
 
@@ -260,34 +194,14 @@ class ListComment extends Component {
     }
 
     getHeader(){
-        if(this.state.mode === "selection"){
-            return(
-                <Header style={{
-                    backgroundColor: "#9b59b6"
-                }}>
-                    <Left>
-                        <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <Text>left</Text>
-                        </Button>
-                    </Left>
-                    <Body style={{ flex: 3 }}>
-                    <Title>Unmoderated comments</Title>
-                    </Body>
-                    <Right>
-                        <Button transparent onPress={() => this.delete()}>
-                            <Icon name={"md-trash"}/>
-                        </Button>
-                    </Right>
-                </Header>
-            );
-        } else {
+
             return(
                 <Header style={{
                     backgroundColor: "#1abc9c"
                 }}>
                     <Left>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <Text>left</Text>
+                            <Icon name="md-arrow-round-back"/>
                         </Button>
                     </Left>
                     <Body style={{ flex: 3 }}>
@@ -297,7 +211,7 @@ class ListComment extends Component {
                 </Header>
             );
         }
-    }
+
 
     render() {
         return (
@@ -318,5 +232,12 @@ class ListComment extends Component {
         );
     }
 }
+
+var styles = StyleSheet.create({
+    listView: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+});
 
 export default ListComment;

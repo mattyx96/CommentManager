@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {View, StyleSheet, StatusBar, ImageBackground} from 'react-native';
 import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text} from 'native-base';
 
 export default class Hello extends Component {
@@ -22,6 +22,14 @@ export default class Hello extends Component {
     render() {
         return (
             <Container>
+                <ImageBackground
+                    style={{
+                       flex: 1, height: "100%", width: "100%",
+                    }}
+                    source={require('../../assets/images/background_flat_green_yellow.png')}
+                    resizeMode='cover'
+                >
+
                 <StatusBar
                     backgroundColor="#1abc9c"
                     barStyle="light-content"
@@ -30,7 +38,6 @@ export default class Hello extends Component {
                     <View style={styles.box}>
                         <Text style={{
                                 alignSelf: 'center',
-                                color: '#ecf0f1',
                                 fontSize:25
                             }}>{this.getHello()}
                         </Text>
@@ -41,10 +48,13 @@ export default class Hello extends Component {
                         <Button rounded style={styles.button} onPress={
                             () => this.props.navigation.navigate('List')
                         }>
-                            <Text>Go</Text>
+                            <Text style={{
+                                color: "#03120F"
+                            }}>Go</Text>
                         </Button>
                     </View>
                 </View>
+                </ImageBackground>
             </Container>
 
         );
@@ -72,7 +82,6 @@ export default class Hello extends Component {
 const styles = StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: '#34495e',
             alignItems: 'center',
             justifyContent: 'center'
         },
@@ -80,14 +89,13 @@ const styles = StyleSheet.create({
             alignSelf: 'center'
         },
         text: {
-            color: '#ecf0f1',
             fontSize: 50,
             alignSelf: 'center'
         },
         button: {
             margin: 10,
             alignSelf: 'center',
-            backgroundColor: '#3498db'
+            backgroundColor: '#E6E23C'
         },
         box: {
             padding: 20,
