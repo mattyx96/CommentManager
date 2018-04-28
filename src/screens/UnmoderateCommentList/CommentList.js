@@ -200,8 +200,10 @@ class ListComment extends Component {
                     backgroundColor: "#1abc9c"
                 }}>
                     <Left>
-                        <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <Icon name="md-arrow-round-back"/>
+                        <Button
+                            transparent
+                            onPress={() => this.props.navigation.navigate("DrawerOpen")}>
+                            <Icon name="menu" />
                         </Button>
                     </Left>
                     <Body style={{ flex: 3 }}>

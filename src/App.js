@@ -8,9 +8,8 @@ import {Content, Container, Root} from 'native-base';
 import {StackNavigator} from 'react-navigation';
 
 
-
-import ListComment from './screens/ListComment/ListComment';
 import Hello from './screens/Hello/Hello';
+import comment from "./screens/Comments/Comment";
 
 
 export default class App extends React.Component {
@@ -35,7 +34,7 @@ export default class App extends React.Component {
 const RootNavigator = StackNavigator(
     {
         Hello: {screen: Hello},
-        List: {screen: ListComment}
+        List: {screen: comment}
     },
     {
         initialRouteName: 'Hello',
