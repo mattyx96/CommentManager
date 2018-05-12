@@ -10,6 +10,7 @@ import {StackNavigator} from 'react-navigation';
 
 import Hello from './screens/Hello/Hello';
 import comment from "./screens/Comments/Comment";
+import firebase from "react-native-firebase";
 
 
 export default class App extends React.Component {
@@ -19,6 +20,28 @@ export default class App extends React.Component {
         this.state = {
             fcm_token: ""
         };
+    }
+
+    componentDidMount() {
+        // this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken:string => {
+        //     // Process your token as required
+        // }
+
+        firebase.messaging().getToken()
+            .then(fcmToken => {
+                if (fcmToken) {
+                    console.log("fcmToken: " + fcmToken);
+                } else {
+                    console.log("fcmToken: NON C'E'!!");
+                }
+            });
+    }
+
+    componentWillUnmount() {
+
+
+
+        // this.onTokenRefreshListener();
     }
 
     render() {
