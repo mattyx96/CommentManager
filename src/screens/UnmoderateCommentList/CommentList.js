@@ -2,7 +2,7 @@ import Item from './Item';
 
 import React, {Component} from "react";
 import axios from 'axios'
-import {ListView, View, StatusBar, StyleSheet} from "react-native";
+import {ListView, View, StatusBar, StyleSheet, RefreshControl, ScrollView} from "react-native";
 import {
     Container,
     Header,
@@ -29,6 +29,7 @@ class ListComment extends Component {
             mode: "loading",
             listViewData: {},
             errorMessage: "",
+            refreshing: false,
         };
     }
 
@@ -81,68 +82,104 @@ class ListComment extends Component {
         })
     }
 
+    delete(id) {
+        this.setState({mode: "loading"});
+        axios.post("http://matteoomicini.drink-web.eu/api/delete_comment_unmoderated", {
+            id: id
+        })
+            .then(() => {
+                this.loadContent();
+            }).catch((error) => {
+            this.setState(
+                {
+                    mode: "error",
+                    errorMessage: error,
+                }
+            );
+        })
+    }
+
+
+    _onRefresh() {
+        this.setState({refreshing: true});
+        this.loadContent();
+        this.setState({refreshing: false});
+    }
+
+
     componentDidMount() {
         this.loadContent();
     }
 
-    getContent(){
+    getContent() {
 
         switch (this.state.mode) {
             case "loading": {
                 return (
                     <Spinner style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center"
-                }} color='green'/>
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }} color='green'/>
                 );
             }
             case "not_loading": {
                 return (
 
                     <List
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
                         dataSource={this.ds.cloneWithRows(this.state.listViewData)}
                         renderRow={
-                                (object) => {
-                                    return(
-                                            <Item numLikes={object.num_like} id={object.id} comment={object.comment} date={object.date}
-                                        sender={object.sender} select={()=>{this.selectItem(object.id)}}/>
-                                    );
-                                }
+                            (object) => {
+                                return (
+                                    <Item numLikes={object.num_like} id={object.id} comment={object.comment}
+                                          date={object.date}
+                                          sender={object.sender} select={() => {
+                                        this.selectItem(object.id)
+                                    }}/>
+                                );
                             }
+                        }
                         renderLeftHiddenRow={
-                                (data) =>{
-                                    return(
-                                        <Button
-                                            full
-                                            onPress={() => this.validateComment(data.id)}
-                                            style={{
-                                              backgroundColor: "#2ecc71",
-                                              flex: 1,
-                                              alignItems: "center",
-                                              justifyContent: "center"
-                                            }}
-                                        >
-                                        <Icon active name="md-checkmark" />
-                                        </Button>
-                                     );
-                                }
+                            (data) => {
+                                return (
+                                    <Button
+                                        full
+                                        onPress={() => this.validateComment(data.id)}
+                                        style={{
+                                            backgroundColor: "#2ecc71",
+                                            flex: 1,
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}
+                                    >
+                                        <Icon active name="md-checkmark"/>
+                                    </Button>
+                                );
                             }
+                        }
                         renderRightHiddenRow={
-                                (data, secId, rowId, rowMap) =>
+                            (data, secId, rowId, rowMap) =>
                                 <Button
                                     full
                                     danger
-                                    onPress={()=>{}}
+                                    onPress={() => {
+                                        this.delete(data.id)
+                                    }}
                                     style={{
                                         flex: 1,
                                         alignItems: "center",
                                         justifyContent: "center"
                                     }}
                                 >
-                                <Icon active name="md-trash" />
+                                    <Icon active name="md-trash"/>
                                 </Button>
-                            }
+                        }
                         leftOpenValue={75}
                         rightOpenValue={-75}
 
@@ -153,14 +190,16 @@ class ListComment extends Component {
             case "error": {
                 return (
                     <View style={{
-                                alignSelf: 'center',
-                                color: '#ecf0f1',
-                                fontSize:25
-                            }}>
+                        alignSelf: 'center',
+                        color: '#ecf0f1',
+                        fontSize: 25
+                    }}>
                         <Text>
                             {this.state.errorMessage}
                         </Text>
-                        <Button onPress={() => {this.loadContent()}}>
+                        <Button onPress={() => {
+                            this.loadContent()
+                        }}>
                             <Icon active name={"md-refresh"}/>
                         </Button>
                     </View>
@@ -169,17 +208,27 @@ class ListComment extends Component {
             case "no_comments" : {
                 return (
                     <View style={{
-                                flex: 1,
-                                backgroundColor: '#34495e',
-                                alignItems: 'center',
-                                justifyContent: 'center'
+                        flex: 1,
+                        backgroundColor: '#34495e',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <ScrollView
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                />
+                            }
+                        >
+
+                            <Text style={{
+                                alignSelf: 'center',
+                                color: "#1abc9c",
                             }}>
-                        <Text style={{
-                                    alignSelf: 'center',
-                                    color:"#1abc9c",
-                                }}>
-                            {this.state.errorMessage}
-                        </Text>
+                                {this.state.errorMessage}
+                            </Text>
+                        </ScrollView>
                     </View>
                 );
             }
@@ -189,36 +238,32 @@ class ListComment extends Component {
         }
     }
 
-    delete(){
+    getHeader() {
 
+        return (
+            <Header style={{
+                backgroundColor: "#1abc9c"
+            }}>
+                <Left>
+                    <Button
+                        transparent
+                        onPress={() => this.props.navigation.navigate("DrawerOpen")}>
+                        <Icon name="menu"/>
+                    </Button>
+                </Left>
+                <Body style={{flex: 3}}>
+                <Title>Unmoderated comments</Title>
+                </Body>
+                <Right/>
+            </Header>
+        );
     }
-
-    getHeader(){
-
-            return(
-                <Header style={{
-                    backgroundColor: "#1abc9c"
-                }}>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.navigation.navigate("DrawerOpen")}>
-                            <Icon name="menu" />
-                        </Button>
-                    </Left>
-                    <Body style={{ flex: 3 }}>
-                    <Title>Unmoderated comments</Title>
-                    </Body>
-                    <Right />
-                </Header>
-            );
-        }
 
 
     render() {
         return (
             <Container style={{
-                 backgroundColor: "#34495e"
+                backgroundColor: "#34495e"
             }}>
                 <StatusBar
                     backgroundColor={"#1abc9c"}

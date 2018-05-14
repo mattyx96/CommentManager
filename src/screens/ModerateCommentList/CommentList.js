@@ -2,7 +2,7 @@ import Item from './Item';
 
 import React, {Component} from "react";
 import axios from 'axios'
-import {ListView, View, StatusBar, StyleSheet} from "react-native";
+import {ListView, View, StatusBar, StyleSheet, RefreshControl, ScrollView} from "react-native";
 import {
     Container,
     Header,
@@ -29,6 +29,7 @@ class ListComment extends Component {
             mode: "loading",
             listViewData: {},
             errorMessage: "",
+            refreshing: false,
         };
     }
 
@@ -64,9 +65,9 @@ class ListComment extends Component {
     }
 
 
-    validateComment(id) {
+    delete(id){
         this.setState({mode: "loading"});
-        axios.post("http://matteoomicini.drink-web.eu/api/validate_comment", {
+        axios.post("http://matteoomicini.drink-web.eu/api/delete_comment_moderated", {
             id: id
         })
             .then(() => {
@@ -79,6 +80,12 @@ class ListComment extends Component {
                 }
             );
         })
+    }
+
+    _onRefresh() {
+        this.setState({refreshing: true});
+        this.loadContent();
+        this.setState({refreshing: false});
     }
 
     componentDidMount() {
@@ -101,6 +108,12 @@ class ListComment extends Component {
                 return (
 
                     <List
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                            />
+                        }
                         dataSource={this.ds.cloneWithRows(this.state.listViewData)}
                         renderRow={
                                 (object) => {
@@ -115,7 +128,7 @@ class ListComment extends Component {
                                 <Button
                                     full
                                     danger
-                                    onPress={()=>{}}
+                                    onPress={()=>{this.delete(data.id)}}
                                     style={{
                                         flex: 1,
                                         alignItems: "center",
@@ -150,17 +163,27 @@ class ListComment extends Component {
             case "no_comments" : {
                 return (
                     <View style={{
-                                flex: 1,
-                                backgroundColor: '#34495e',
-                                alignItems: 'center',
-                                justifyContent: 'center'
+                        flex: 1,
+                        backgroundColor: '#34495e',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <ScrollView
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                />
+                            }
+                        >
+
+                            <Text style={{
+                                alignSelf: 'center',
+                                color: "#1abc9c",
                             }}>
-                        <Text style={{
-                                    alignSelf: 'center',
-                                    color:"#1abc9c",
-                                }}>
-                            {this.state.errorMessage}
-                        </Text>
+                                {this.state.errorMessage}
+                            </Text>
+                        </ScrollView>
                     </View>
                 );
             }
@@ -168,10 +191,6 @@ class ListComment extends Component {
                 return (<Text>default</Text>);
             }
         }
-    }
-
-    delete() {
-
     }
 
     getHeader() {

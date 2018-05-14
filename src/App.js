@@ -11,6 +11,7 @@ import {StackNavigator} from 'react-navigation';
 import Hello from './screens/Hello/Hello';
 import comment from "./screens/Comments/Comment";
 import firebase from "react-native-firebase";
+import axios from "axios/index";
 
 
 export default class App extends React.Component {
@@ -22,26 +23,59 @@ export default class App extends React.Component {
         };
     }
 
-    componentDidMount() {
-        // this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken:string => {
-        //     // Process your token as required
-        // }
-
+    tokenCheck() {
         firebase.messaging().getToken()
             .then(fcmToken => {
                 if (fcmToken) {
-                    console.log("fcmToken: " + fcmToken);
+                    this.setState({fcm_token: fcmToken});
                 } else {
-                    console.log("fcmToken: NON C'E'!!");
+                    alert("token_not_exist");
                 }
             });
+
+        if (this.state.fcm_token !== this.getToken()){
+            this.updateToken(this.state.fcm_token);
+        }
+    }
+
+    getToken(){
+        let token;
+        axios.get("http://matteoomicini.drink-web.eu/api/get_token")
+            .then(res => {
+                token = res.data;
+            }).catch((error) => {
+                alert("token_error: " + error);
+        });
+        return token;
+    }
+
+    updateToken(fcmToken){
+        axios.post("http://matteoomicini.drink-web.eu/api/update_token", {
+            token: fcmToken
+        })
+            .catch((error) => {
+                this.setState(
+                    {
+                        mode: "error",
+                        errorMessage: error,
+                    }
+                );
+            })
+    }
+
+    componentDidMount() {
+        this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+            this.updateToken(fcmToken).bind(this);
+        });
+        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+            alert("New Comment: " + notification._body);
+        });
+        this.tokenCheck();
     }
 
     componentWillUnmount() {
-
-
-
-        // this.onTokenRefreshListener();
+        this.notificationListener();
+        this.onTokenRefreshListener();
     }
 
     render() {
