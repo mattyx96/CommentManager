@@ -19,7 +19,8 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            fcm_token: ""
+            fcm_token: "",
+            errorMessage: ""
         };
     }
 
@@ -28,28 +29,35 @@ export default class App extends React.Component {
             .then(fcmToken => {
                 if (fcmToken) {
                     this.setState({fcm_token: fcmToken});
+                    console.log("token in the phone is : " + fcmToken);
+
+                    if (this.state.fcm_token !== this.getTokenDb()){
+                        console.log("the state token " + this.state.fcm_token + "is different from the db token" + this.getTokenDb() + "so update the db");
+                        this.updateToken(this.state.fcm_token);
+                    }else{
+                        console.log("il token del telefono" + this.state.fcm_token + "é uguale a quello del db");
+                    }
+
                 } else {
                     alert("token_not_exist");
                 }
             });
-
-        if (this.state.fcm_token !== this.getToken()){
-            this.updateToken(this.state.fcm_token);
-        }
     }
 
-    getToken(){
-        let token;
+    getTokenDb(){
+        let token = '';
         axios.get("http://matteoomicini.drink-web.eu/api/get_token")
             .then(res => {
                 token = res.data;
             }).catch((error) => {
                 alert("token_error: " + error);
         });
+        console.log("token in the db is : " + token);
         return token;
     }
 
     updateToken(fcmToken){
+        console.log("update token...");
         axios.post("http://matteoomicini.drink-web.eu/api/update_token", {
             token: fcmToken
         })
@@ -60,6 +68,7 @@ export default class App extends React.Component {
                         errorMessage: error,
                     }
                 );
+                console.log("error after sending token: " + this.state.errorMessage)
             })
     }
 
